@@ -4,7 +4,7 @@ const book = {
     menuVisible: false,
     settingVisible: -1, // -1：不显示，0：字号，1：主题，2：进度，3:目录
     defaultFontSize: 16,
-    defaultFontFamily: 'Default',
+    defaultFontFamily: '宋体',
     fontFamilyVisible: false,
     defaultTheme: 'Default',
     bookAvailable: false,
