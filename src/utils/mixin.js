@@ -44,7 +44,7 @@ export const ebookMixin = {
         default:
           addCss(`${process.env.VUE_APP_RES_PATH}/theme/theme_default.css`)
       }
-    },
+    }
   },
   computed: {
     ...mapGetters(

@@ -74,10 +74,7 @@
           this.setDefaultTheme(theme)
         }
       },
-      initEpub () {
-        const url = process.env.VUE_APP_RES_PATH + '/' + this.fileName + '.epub'
-        this.book = new Epub(url)
-        this.setCurrentBook(this.book)
+      initRendition () {
         this.rendition = this.book.renderTo('read', {
           width: innerWidth,
           height: innerHeight,
@@ -89,7 +86,17 @@
           this.initFontFamily()
           this.initGlobalStyle()
         })
-
+        this.rendition.hooks.content.register(contents => {
+          Promise.all([
+            contents.addStylesheet(`${process.env.VUE_APP_RES_PATH}/font/%E5%AE%8B%E4%BD%93.css`),
+            contents.addStylesheet(`${process.env.VUE_APP_RES_PATH}/font/%E6%A5%B7%E4%BD%93.css`),
+            contents.addStylesheet(`${process.env.VUE_APP_RES_PATH}/font/%E9%A2%9C%E4%BD%93.css`),
+            contents.addStylesheet(`${process.env.VUE_APP_RES_PATH}/font/%E9%BB%91%E4%BD%93.css`)
+          ]).then(() => {
+          })
+        })
+      },
+      initGesture () {
         this.rendition.on('touchstart', event => {
           this.startX = event.changedTouches[0].clientX
           this.startTime = event.timeStamp
@@ -107,14 +114,18 @@
           event.preventDefault()
           event.stopPropagation()
         })
-        this.rendition.hooks.content.register(contents => {
-          Promise.all([
-            contents.addStylesheet(`${process.env.VUE_APP_RES_PATH}/font/%E5%AE%8B%E4%BD%93.css`),
-            contents.addStylesheet(`${process.env.VUE_APP_RES_PATH}/font/%E6%A5%B7%E4%BD%93.css`),
-            contents.addStylesheet(`${process.env.VUE_APP_RES_PATH}/font/%E9%A2%9C%E4%BD%93.css`),
-            contents.addStylesheet(`${process.env.VUE_APP_RES_PATH}/font/%E9%BB%91%E4%BD%93.css`)
-          ]).then(() => {
-          })
+      },
+      initEpub () {
+        const url = process.env.VUE_APP_RES_PATH + '/' + this.fileName + '.epub'
+        this.book = new Epub(url)
+        this.setCurrentBook(this.book)
+        this.initRendition()
+        this.initGesture()
+        this.book.ready.then(() => {
+          return this.book.locations.generate(750 * (window.innerWidth / 375)) *
+            (getFontSize(this.fileName) / 16)
+        }).then(() => {
+          this.setBookAvailable(true)
         })
       }
     },

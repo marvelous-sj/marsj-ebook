@@ -86,7 +86,7 @@ function inRemoveCss (href) {
     `${process.env.VUE_APP_RES_PATH}/theme/theme_default.css`,
     `${process.env.VUE_APP_RES_PATH}/theme/theme_eye.css`,
     `${process.env.VUE_APP_RES_PATH}/theme/theme_gold.css`,
-    `${process.env.VUE_APP_RES_PATH}/theme/theme_night.css`,
+    `${process.env.VUE_APP_RES_PATH}/theme/theme_night.css`
   ]
-  return cssAry.indexOf(href)
+  return cssAry.indexOf(href) !== -1
 }
