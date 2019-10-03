@@ -3,7 +3,7 @@
     <div class="setting-wrapper" v-show="menuVisible && settingVisible === 2">
       <div class="setting-progress">
         <div class="read-time-wrapper">
-          <span class="read-time-text"></span>
+          <span class="read-time-text">{{getReadTimeText()}}</span>
           <span class="icon-forward"></span>
         </div>
         <div class="progress-wrapper">
@@ -24,6 +24,7 @@
           </div>
         </div>
         <div class="text-wrapper">
+          <span class="progress-section-text">{{getSectionName}}</span>
           <span class="progress-text">({{bookAvailable ? progress + '%' : $t('book.loading')}})</span>
         </div>
       </div>
@@ -33,9 +34,21 @@
 
 <script>
   import { ebookMixin } from '../../utils/mixin'
+  import { getReadTime } from '../../utils/localStorage'
 
   export default {
     mixins: [ebookMixin],
+    computed: {
+      getSectionName () {
+        if (this.section) {
+          let sectionInfo = this.currentBook.section(this.section)
+          if (sectionInfo && sectionInfo.href) {
+            return this.currentBook.navigation.get(sectionInfo.href).label
+          }
+        }
+        return ''
+      }
+    },
     methods: {
       onProgressInput (progress) {
         this.setProgress(progress).then(() => {
@@ -50,7 +63,7 @@
       },
       displayProgress () {
         const cfi = this.currentBook.locations.cfiFromPercentage(this.progress / 100)
-        this.currentBook.rendition.display(cfi)
+        this.display(cfi)
       },
       updateProgressBg () {
         this.$refs.progress.style.backgroundSize = `${this.progress}% 100%`
@@ -72,7 +85,18 @@
       displaySection () {
         let sectionInfo = this.currentBook.section(this.section)
         if (sectionInfo && sectionInfo.href) {
-          this.currentBook.rendition.display(sectionInfo.href)
+          this.display(sectionInfo.href)
+        }
+      },
+      getReadTimeText () {
+        return this.$t('book.haveRead').replace('$1', this.getReadTimeByMinute())
+      },
+      getReadTimeByMinute () {
+        const readTime = getReadTime(this.fileName)
+        if (!readTime) {
+          return 0
+        } else {
+          return Math.ceil(readTime / 60)
         }
       }
     },
@@ -164,7 +188,7 @@
 
         .progress-section-text {
           line-height: px2rem(15);
-          //@include ellipsis;
+          @include ellipsis;
         }
 
         .progress-text {

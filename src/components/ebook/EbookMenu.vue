@@ -52,7 +52,7 @@
     z-index: 102;
     display: flex;
     width: 100%;
-    height: px2rem(48);
+    height: px2rem(49);
     background: white;
     box-shadow: 0 px2rem(-8) px2rem(8) rgba(0, 0, 0, .15);
     font-size: 20px;

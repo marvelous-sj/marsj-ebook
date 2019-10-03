@@ -13,7 +13,7 @@
     saveFontFamily,
     saveFontSize,
     getTheme,
-    saveTheme
+    saveTheme, getLocation
   } from '../../utils/localStorage'
 
   global.epub = Epub
@@ -22,13 +22,17 @@
     methods: {
       prevPage () {
         if (this.rendition) {
-          this.rendition.prev()
+          this.rendition.prev().then(() => {
+            this.refreshLocation()
+          })
           this.hideTitleAndMenu()
         }
       },
       nextPage () {
         if (this.rendition) {
-          this.rendition.next()
+          this.rendition.next().then(() => {
+            this.refreshLocation()
+          })
           this.hideTitleAndMenu()
         }
       },
@@ -80,12 +84,14 @@
           height: innerHeight,
           method: 'default'
         })
-        this.rendition.display().then(() => {
+        const location = getLocation(this.fileName)
+        this.display(location, () => {
           this.initTheme()
           this.initFontSize()
           this.initFontFamily()
           this.initGlobalStyle()
-        })
+          }
+        )
         this.rendition.hooks.content.register(contents => {
           Promise.all([
             contents.addStylesheet(`${process.env.VUE_APP_RES_PATH}/font/%E5%AE%8B%E4%BD%93.css`),
@@ -124,8 +130,9 @@
         this.book.ready.then(() => {
           return this.book.locations.generate(750 * (window.innerWidth / 375)) *
             (getFontSize(this.fileName) / 16)
-        }).then(() => {
+        }).then(locations => {
           this.setBookAvailable(true)
+          // this.refreshLocation()
         })
       }
     },
