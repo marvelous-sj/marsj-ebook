@@ -1,5 +1,5 @@
 import { mapActions, mapGetters } from 'vuex'
-import { themeList, addCss, removeAllCss } from './book'
+import { addCss, getReadTimeByMinute, removeAllCss, themeList } from './book'
 import { saveLocation } from './localStorage'
 
 export const ebookMixin = {
@@ -47,13 +47,15 @@ export const ebookMixin = {
       }
     },
     refreshLocation () {
-        const currentLocation = this.currentBook.rendition.currentLocation()
+      const currentLocation = this.currentBook.rendition.currentLocation()
+      if (currentLocation && currentLocation.start) {
         const startCfi = currentLocation.start.cfi
         const progress = this.currentBook.locations.percentageFromCfi(startCfi)
         this.setSection(currentLocation.start.index)
         this.setProgress(Math.floor(progress * 100))
         saveLocation(this.fileName, startCfi)
-  },
+      }
+    },
     display (target, cb) {
       if (target) {
         this.currentBook.rendition.display(target).then(() => {
@@ -66,6 +68,14 @@ export const ebookMixin = {
           if (cb) cb()
         })
       }
+    },
+    hideTitleAndMenu () {
+      this.setMenuVisible(false)
+      this.setSettingVisible(-1)
+      this.setFontFamilyVisible(false)
+    },
+    getReadTimeText () {
+      return this.$t('book.haveRead').replace('$1', getReadTimeByMinute(this.fileName))
     }
   },
   computed: {

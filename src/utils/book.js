@@ -1,3 +1,5 @@
+import { getReadTime } from './localStorage'
+
 export const FONT_SIZE_LIST = [
   { fontSize: 12 },
   { fontSize: 14 },
@@ -89,4 +91,17 @@ function inRemoveCss (href) {
     `${process.env.VUE_APP_RES_PATH}/theme/theme_night.css`
   ]
   return cssAry.indexOf(href) !== -1
+}
+
+export function getReadTimeByMinute (fileName) {
+  const readTime = getReadTime(fileName)
+  if (!readTime) {
+    return 0
+  } else {
+    return Math.ceil(readTime / 60)
+  }
+}
+
+export function flatten (array) {
+  return [].concat(...array.map(item => [].concat(item, ...flatten(item.subitems))))
 }

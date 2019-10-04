@@ -48,9 +48,9 @@
     font-size: 20px;
 
     .left {
-      flex: 0 0 px2rem(60);
-      @include left;
+      /*flex: 0 0 px2rem(60);*/
       margin-left: px2rem(15);
+      @include left;
     }
 
     .right {
