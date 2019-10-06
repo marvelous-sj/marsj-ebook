@@ -15,7 +15,7 @@ $ratio: 375 / 10;
   align-items: center;
 }
 
-@mixin left {
+@mixin right {
   display: flex;
   justify-content: flex-end;
   align-items: center;
