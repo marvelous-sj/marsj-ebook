@@ -1,6 +1,7 @@
 <template>
   <div class="ebook-reader">
     <div id="read"></div>
+    <div class="ebook-reader-mask" @click="clickMask" @touchmove="move" @touchend="moveEnd"></div>
   </div>
 </template>
 
@@ -21,6 +22,32 @@
   export default {
     mixins: [ebookMixin],
     methods: {
+      move (e) {
+        let offSetY = 0
+        if (this.firstOffSetY) {
+          offSetY = e.changedTouches[0].clientY - this.firstOffSetY
+          this.setOffsetY(offSetY)
+        } else {
+          this.firstOffSetY = e.changedTouches[0].clientY
+        }
+        e.preventDefault()
+        e.stopPropagation()
+      },
+      moveEnd () {
+        this.setOffsetY(0)
+        this.firstOffSetY = null
+      },
+      clickMask (e) {
+        const offsetX = e.offsetX
+        const width = window.innerWidth
+        if (offsetX > 0 && offsetX < width * 0.3) {
+          this.prevPage()
+        } else if (offsetX > 0 && offsetX > width * 0.7) {
+          this.nextPage()
+        } else {
+          this.showTitleAndMenu()
+        }
+      },
       prevPage () {
         if (this.rendition) {
           this.rendition.prev().then(() => {
@@ -98,25 +125,25 @@
           })
         })
       },
-      initGesture () {
-        this.rendition.on('touchstart', event => {
-          this.startX = event.changedTouches[0].clientX
-          this.startTime = event.timeStamp
-        })
-        this.rendition.on('touchend', event => {
-          const offSetX = event.changedTouches[0].clientX - this.startX
-          const duration = event.timeStamp - this.startTime
-          if (offSetX > 40 && duration < 500) {
-            this.prevPage()
-          } else if (offSetX < -40 && duration < 500) {
-            this.nextPage()
-          } else {
-            this.showTitleAndMenu()
-          }
-          event.preventDefault()
-          event.stopPropagation()
-        })
-      },
+      // initGesture () {
+      //   this.rendition.on('touchstart', event => {
+      //     this.startX = event.changedTouches[0].clientX
+      //     this.startTime = event.timeStamp
+      //   })
+      //   this.rendition.on('touchend', event => {
+      //     const offSetX = event.changedTouches[0].clientX - this.startX
+      //     const duration = event.timeStamp - this.startTime
+      //     if (offSetX > 40 && duration < 500) {
+      //       this.prevPage()
+      //     } else if (offSetX < -40 && duration < 500) {
+      //       this.nextPage()
+      //     } else {
+      //       this.showTitleAndMenu()
+      //     }
+      //     event.preventDefault()
+      //     event.stopPropagation()
+      //   })
+      // },
       parseBook () {
         this.book.loaded.cover.then(cover => {
           this.book.archive.createUrl(cover).then(url => {
@@ -144,7 +171,7 @@
         this.book = new Epub(url)
         this.setCurrentBook(this.book)
         this.initRendition()
-        this.initGesture()
+        // this.initGesture()
         this.parseBook()
         this.book.ready.then(() => {
           return this.book.locations.generate(750 * (window.innerWidth / 375)) *
@@ -166,4 +193,20 @@
 
 <style lang="scss" scoped>
   @import '../../assets/style/global';
+
+  .ebook-reader {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    .ebook-reader-mask {
+      position: absolute;
+      background: transparent;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 150;
+    }
+  }
 </style>
