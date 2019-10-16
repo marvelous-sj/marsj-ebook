@@ -64,12 +64,11 @@
         }
       },
       isBookmark (bookmark) {
+        this.isFixed = bookmark
         if (bookmark) {
           this.color = BLUE
-          this.isFixed = true
         } else {
           this.color = WHITE
-          this.isFixed = false
         }
       }
     },
