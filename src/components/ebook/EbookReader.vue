@@ -1,7 +1,13 @@
 <template>
   <div class="ebook-reader">
     <div id="read"></div>
-    <div class="ebook-reader-mask" @click="clickMask" @touchmove="move" @touchend="moveEnd"></div>
+    <div class="ebook-reader-mask"
+         @click="clickMask"
+         @touchmove="move"
+         @touchend="moveEnd"
+         @mousedown.left="onMouseEnter"
+         @mousemove.left="onMouseMove"
+         @mouseup.left="onMouseUp"></div>
   </div>
 </template>
 
@@ -22,6 +28,43 @@
   export default {
     mixins: [ebookMixin],
     methods: {
+      onMouseUp (e) {
+        if (this.mouseState === 2) {
+          this.setOffsetY(0)
+          this.firstOffSetY = null
+          const time = e.timeStamp - this.mouseStartTime
+          if (time < 200) {
+            this.mouseState = 4
+          } else {
+            this.mouseState = 3
+          }
+        } else {
+          this.mouseState = 4
+        }
+        e.preventDefault()
+        e.stopPropagation()
+      },
+      onMouseMove (e) {
+        if (this.mouseState === 1) {
+          this.mouseState = 2
+        } else if (this.mouseState === 2) {
+          let offSetY = 0
+          if (this.firstOffSetY) {
+            offSetY = e.clientY - this.firstOffSetY
+            this.setOffsetY(offSetY)
+          } else {
+            this.firstOffSetY = e.clientY
+          }
+        }
+        e.preventDefault()
+        e.stopPropagation()
+      },
+      onMouseEnter (e) {
+        this.mouseStartTime = e.timeStamp
+        this.mouseState = 1
+        e.preventDefault()
+        e.stopPropagation()
+      },
       move (e) {
         let offSetY = 0
         if (this.firstOffSetY) {
@@ -38,6 +81,9 @@
         this.firstOffSetY = null
       },
       clickMask (e) {
+        if (this.mouseState && (this.mouseState === 2 || this.mouseState === 3)) {
+          return
+        }
         const offsetX = e.offsetX
         const width = window.innerWidth
         if (offsetX > 0 && offsetX < width * 0.3) {
@@ -106,6 +152,7 @@
           width: innerWidth,
           height: innerHeight,
           method: 'default'
+          // flow: 'scrolled'
         })
         const location = getLocation(this.fileName)
         this.display(location, () => {
@@ -206,7 +253,7 @@
       height: 100%;
       top: 0;
       left: 0;
-      z-index: 150;
+      z-index: 99;
     }
   }
 </style>

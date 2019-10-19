@@ -50,7 +50,7 @@
     },
     watch: {
       offsetY (v) {
-        if (!this.bookAvailable && this.menuVisible) {
+        if (!this.bookAvailable || this.menuVisible) {
           return
         }
         if (this.height <= v && this.threshold > v) {

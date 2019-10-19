@@ -37,12 +37,6 @@
 
   export default {
     mixins: [ebookMixin],
-    computed: {
-      getSectionName () {
-        const section = this.section
-        return section ? this.navigation[section].label : ''
-      }
-    },
     methods: {
       onProgressInput (progress) {
         this.setProgress(progress).then(() => {

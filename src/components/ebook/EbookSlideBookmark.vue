@@ -45,7 +45,7 @@
   @import '../../assets/style/global';
   .ebook-slide-bookmark{
     width: 100%;
-    .slide-bookmark-title{
+    .slide-bookmark-title {
       width: 100%;
       height: px2rem(48);
       font-size: px2rem(14);
@@ -53,6 +53,7 @@
       padding: 0 px2rem(15);
       box-sizing: border-box;
       @include left;
+    }
       .slide-bookmark-list{
         padding: 0 px2rem(15);
         box-sizing: border-box;
@@ -79,7 +80,6 @@
             @include ellipsis2(3);
           }
         }
-      }
     }
   }
 </style>
