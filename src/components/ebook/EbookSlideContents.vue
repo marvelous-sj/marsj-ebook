@@ -39,7 +39,7 @@
       <div class="slide-contents-item" v-for="(item,index) in navigation" :key="index">
         <span class="slide-contents-item-label" :class="{'selected':index === section}"
               @click="displayContent(item.href)" :style="itemStyle(item)">{{item.label}}</span>
-        <span class="slide-contents-item-page"></span>
+        <span class="slide-contents-item-page">{{item.page}}</span>
       </div>
     </scroll>
     <scroll class="slide-search-list"
@@ -241,6 +241,9 @@
         }
 
         .slide-contents-item-page {
+          flex: 0 0 px2rem(30);
+          font-size: px2rem(10);
+          @include right;
         }
       }
     }

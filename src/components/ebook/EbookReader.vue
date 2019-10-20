@@ -33,7 +33,7 @@
           this.setOffsetY(0)
           this.firstOffSetY = null
           const time = e.timeStamp - this.mouseStartTime
-          if (time < 200) {
+          if (time < 100) {
             this.mouseState = 4
           } else {
             this.mouseState = 3
@@ -221,9 +221,33 @@
         // this.initGesture()
         this.parseBook()
         this.book.ready.then(() => {
-          return this.book.locations.generate(750 * (window.innerWidth / 375)) *
-            (getFontSize(this.fileName) / 16)
+          return this.book.locations.generate(750 * (window.innerWidth / 375) *
+            (getFontSize(this.fileName) / 16))
         }).then(locations => {
+          this.navigation.forEach(nav => {
+            nav.pageList = []
+          })
+          locations.forEach(item => {
+            const loc = item.match(/\[(.*)\]!/)[1]
+            this.navigation.forEach(nav => {
+              if (nav.href) {
+                const href = nav.href.match(/^(.*)\.html$/)[1]
+                if (href === loc) {
+                  nav.pageList.push(item)
+                }
+              }
+            })
+          })
+          this.currentPage = 1
+          this.navigation.forEach((nav, index) => {
+            if (index === 0) {
+              nav.page = 1
+            } else {
+              nav.page = this.currentPage
+            }
+            this.currentPage += nav.pageList.length + 1
+          })
+          this.setPageList(locations)
           this.setBookAvailable(true)
           // this.refreshLocation()
         })
