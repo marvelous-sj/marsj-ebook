@@ -1,5 +1,5 @@
 <template>
-  <transition name="host-search">
+  <transition name="host-search-move">
     <scroll class="hot-search-wrapper" :top="top" @onScroll="onScroll" ref="scroll">
       <hot-search :label="$t('home.hotSearch')"
                   :btn="$t('home.change')"
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-  import HotSearch from '@/components/home/hotSearch'
+  import HotSearch from '@/components/home/HotSearch'
   import Scroll from '../common/Scroll'
   import { px2rem } from '../../utils/utils'
   import { storeHomeMixin } from '../../utils/mixin'
@@ -133,6 +133,9 @@
     methods: {
       onScroll (offsetY) {
         this.setHotSearchOffsetY(offsetY)
+      },
+      reset () {
+        this.$refs.scroll.scrollTo(0, 0)
       }
     }
   }

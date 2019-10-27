@@ -6,29 +6,34 @@
           <div class="title-text-wrapper">
             <span class="title-text title">{{$t('home.title')}}</span>
           </div>
-          <div class="title-icon-shake-wrapper">
+          <div class="title-icon-shake-wrapper" @click="showFlapCard">
             <span class="icon-shake icon"></span>
           </div>
         </div>
       </transition>
-      <div class="title-icon-back-wrapper" :class="{'hide-title':!titleVisible}">
-        <span class="icon-back icon"></span>
+      <div class="title-icon-back-wrapper" :class="{'hide-title':!titleVisible}" @click="back">
+        <span class="icon-back icon" ></span>
       </div>
       <div class="search-bar-input-wrapper" :class="{'hide-title':!titleVisible}">
         <div class="search-bar-block" :class="{'hide-title':!titleVisible}"></div>
         <div class="search-bar-input">
           <span class="icon-search icon"></span>
-          <input class="input" type="text" v-model="searchText" :placeholder="$t('home.hint')">
+          <input
+            class="input"
+            type="text"
+            v-model="searchText"
+            :placeholder="$t('home.hint')"
+            @click="showHotSearch">
         </div>
       </div>
     </div>
-    <hot-search-list></hot-search-list>
+    <hot-search-list v-show="hotSearchVisible" ref="hotSearch"></hot-search-list>
   </div>
 </template>
 
 <script>
   import { storeHomeMixin } from '../../utils/mixin'
-  import HotSearchList from './hotSearchList'
+  import HotSearchList from './HotSearchList'
 
   export default {
     name: 'SearchBar',
@@ -38,7 +43,8 @@
       return {
         searchText: '',
         titleVisible: true,
-        shadowVisible: false
+        shadowVisible: false,
+        hotSearchVisible: false
       }
     },
     watch: {
@@ -50,9 +56,45 @@
           this.showTitle()
           this.hideShadow()
         }
+      },
+      hotSearchOffsetY (offsetY) {
+        if (offsetY > 0) {
+          this.showShadow()
+        } else {
+          this.hideShadow()
+        }
       }
     },
     methods: {
+      showFlapCard () {
+        this.setFlapCardVisible(true)
+      },
+      back () {
+        if (this.offsetY > 0) {
+          this.showShadow()
+        } else {
+          this.hideShadow()
+        }
+        this.hideHotSearch()
+      },
+      showHotSearch () {
+        this.hideTitle()
+        this.hotSearchVisible = true
+        this.hideShadow()
+        this.$nextTick(() => {
+          this.$refs.hotSearch.reset()
+        })
+      },
+      hideHotSearch () {
+        if (this.offsetY > 0) {
+          this.hideTitle()
+          this.showShadow()
+        } else {
+          this.showTitle()
+          this.hideShadow()
+        }
+        this.hotSearchVisible = false
+      },
       hideTitle () {
         this.titleVisible = false
       },
@@ -105,6 +147,7 @@
     .title-icon-back-wrapper{
       position: absolute;
       top: 0;
+      z-index: 151;
       left: px2rem(15);
       height: px2rem(42);
       @include center;
