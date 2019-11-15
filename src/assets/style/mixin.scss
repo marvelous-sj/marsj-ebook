@@ -5,6 +5,16 @@ $ratio: 375 / 10;
 @function px2rem($px) {
   @return $px / $ratio + rem;
 }
+
+@mixin absCenter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+
 @mixin center {
   display: flex;
   justify-content: center;
