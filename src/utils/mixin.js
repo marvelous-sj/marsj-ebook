@@ -7,7 +7,8 @@ export const storeHomeMixin = {
     ...mapGetters(['offsetY', 'hotSearchOffsetY', 'flapCardVisible'])
   },
   methods: {
-    ...mapActions(['setOffsetY', 'setHotSearchOffsetY', 'setFlapCardVisible'])
+    ...mapActions(['setOffsetY', 'setHotSearchOffsetY', 'setFlapCardVisible']),
+    showBookDetail (data) {}
   }
 }
 export const ebookMixin = {
