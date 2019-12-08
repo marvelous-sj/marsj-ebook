@@ -22,7 +22,7 @@
     <div class="book-card" :class="{'animation': runBookCardAnimation}" v-show="runBookCardAnimation">
       <div class="book-card-wrapper">
         <div class="img-wrapper">
-          <img class="img" v-lazy="data.cover">
+          <img class="img" :src="data.cover">
         </div>
         <div class="content-wrapper">
           <div class="title">{{data.title}}</div>

@@ -8,7 +8,9 @@ export const storeHomeMixin = {
   },
   methods: {
     ...mapActions(['setOffsetY', 'setHotSearchOffsetY', 'setFlapCardVisible']),
-    showBookDetail (data) {}
+    showBookDetail (book) {
+      this.$router.push({ path: '/store/detail', query: { fileName: book.fileName, category: book.categoryText } })
+    }
   }
 }
 export const ebookMixin = {

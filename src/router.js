@@ -27,6 +27,14 @@ export default new Router({
         {
           path: 'home',
           component: () => import('./views/store/store-home')
+        },
+        {
+          path: 'list',
+          component: () => import('./views/store/store-list')
+        },
+        {
+          path: 'detail',
+          component: () => import('./views/store/store-detail')
         }
       ]
     }
