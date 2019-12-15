@@ -20,7 +20,7 @@
   import Featured from '@/components/home/featured'
   import { realPx } from '@/utils/utils'
   import { list } from '@/api/store'
-  import { categoryList, categoryText } from '@/utils/book'
+  import { getCategoryName, categoryText } from '@/utils/store'
 
   export default {
     components: {
@@ -51,13 +51,13 @@
       }
     },
     methods: {
-      getCategoryText(key) {
-        return `${categoryText(categoryList[key], this)}(${this.list[key].length})`
+      getCategoryText (key) {
+          getCategoryName(key)
       },
-      back() {
+      back () {
         this.$router.go(-1)
       },
-      onScroll(offsetY) {
+      onScroll (offsetY) {
         if (offsetY > realPx(42)) {
           this.$refs.title.showShadow()
         } else {

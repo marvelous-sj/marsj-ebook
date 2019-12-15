@@ -189,7 +189,7 @@
         getLocalForage(this.bookItem.fileName, (err, value) => {
           if (!err && value instanceof Blob) {
             this.$router.push({
-              path: '/book-store/book-speaking',
+              path: '/store/book-speaking',
               query: {
                 fileName: this.bookItem.fileName
               }
@@ -197,7 +197,7 @@
           } else {
             // this.showToast(this.$t('shelf.downloadFirst'))
             this.$router.push({
-              path: '/book-store/book-speaking',
+              path: '/store/book-speaking',
               query: {
                 fileName: this.bookItem.fileName,
                 opf: this.opf

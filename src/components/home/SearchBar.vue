@@ -23,7 +23,8 @@
             type="text"
             v-model="searchText"
             :placeholder="$t('home.hint')"
-            @click="showHotSearch">
+            @click="showHotSearch"
+            @keyup.13.exact="doSearch">
         </div>
       </div>
     </div>
@@ -66,6 +67,14 @@
       }
     },
     methods: {
+      doSearch () {
+            this.$router.push({
+                path: '/store/list',
+                query: {
+                    keyword: this.searchText
+                }
+            })
+      },
       showFlapCard () {
         this.setFlapCardVisible(true)
       },
@@ -75,7 +84,11 @@
         } else {
           this.hideShadow()
         }
-        this.hideHotSearch()
+        if (this.hotSearchVisible) {
+          this.hideHotSearch()
+        } else {
+          this.$router.push('/store/shelf')
+        }
       },
       showHotSearch () {
         this.hideTitle()

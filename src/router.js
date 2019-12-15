@@ -22,11 +22,15 @@ export default new Router({
     {
       path: '/store',
       component: () => import('./views/store/index'),
-      redirect: '/store/home',
+      redirect: '/store/shelf',
       children: [
         {
           path: 'home',
           component: () => import('./views/store/store-home')
+        },
+        {
+          path: 'shelf',
+          component: () => import('./views/store/store-shelf')
         },
         {
           path: 'list',
