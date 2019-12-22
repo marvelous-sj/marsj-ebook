@@ -1,0 +1,13 @@
+<template>
+<div class="shelf-item-add"></div>
+</template>
+
+<script>
+    export default {
+        name: 'ShelfItemAdd'
+    }
+</script>
+
+<style lang="scss" scoped>
+  @import '../../assets/style/global';
+</style>

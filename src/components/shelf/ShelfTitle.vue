@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div class="shelf-title" v-show="shelfTitleVisible">
+    <div class="shelf-title" :class="{'hide-shadow':isHideShadow}" v-show="shelfTitleVisible">
       <div class="shelf-title-text-wrapper">
         <span class="shelf-title-text">{{$t('shelf.title')}}</span>
         <span v-show="isEditMode" class="shelf-title-sub-text">{{selectedText}}</span>
@@ -33,6 +33,16 @@
           : this.$t('shelf.haveSelectedBooks').replace('$1', selectedNumber)
       }
     },
+    watch: {
+      offsetY (offsetY) {
+        this.isHideShadow = offsetY <= 0;
+      }
+    },
+    data () {
+      return {
+        isHideShadow: true
+      }
+    },
     methods: {
       changeEditStatus () {
         this.setIsEditMode(!this.isEditMode)
@@ -51,6 +61,10 @@
     width: 100%;
     height: px2rem(42);
     background: white;
+    box-shadow: 0 px2rem(2) px2rem(2) 0 rgba(0,0,0,0.1);
+    &.hide-shadow{
+      box-shadow: none;
+    }
     .shelf-title-text-wrapper{
       position: absolute;
       top: 0;
