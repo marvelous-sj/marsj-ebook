@@ -14,6 +14,7 @@
   import ShelfItem from './ShelfItem'
   import { shelf } from '../../api/store'
   import { realPx } from '../../utils/utils'
+  import { appendAddToShelf } from '../../utils/store'
 
   export default {
     name: 'ShelfList',
@@ -26,7 +27,7 @@
     },
     created () {
       shelf().then(response => {
-        this.setShelfList(response.data.bookList)
+        this.setShelfList(appendAddToShelf(response.data.bookList))
       })
     }
   }
